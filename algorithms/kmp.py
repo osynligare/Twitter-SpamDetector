@@ -25,12 +25,14 @@ def kmp(text, pattern):
     if len(pattern) > len(text):
         return -1
     else:
+        pattern = pattern.lower()
+        text = text.lower()
         table = part(pattern)
         j = 0
 
         for i in range(len(text)):
             if text[i] == pattern[j]:
-                if (j == len(pattern)-1):
+                if j == len(pattern)-1:
                     return i - len(pattern) + 1
                 else:
                     j = j+1

@@ -1,5 +1,7 @@
 from tweety import find_post, find_user
-from StringMatch import kmp
+from algorithms.kmp import kmp
+from algorithms.boyer_moore import boyer_moore
+from algorithms.regex import regex
 
 
 def main(algorithm, username, keyword):
@@ -24,23 +26,30 @@ def main(algorithm, username, keyword):
 
     elif algorithm == 2:                            # boyer_moore
         for i in range(len(posts)):
-            idx = kmp(posts[i], keyword)
+            try:
+                idx = int(boyer_moore(posts[i], keyword))
+                if idx != -1:
+                    flags.append([])
+                    flags[len(flags) - 1].append(i)
+                    flags[len(flags) - 1].append(idx)
+                    flags[len(flags) - 1].append(idx + len(keyword))
+            except:
+                i = i
+
+    elif algorithm == 3:                            # regex
+        for i in range(len(posts)):
+            idx = regex(posts[i], keyword)
             if idx != -1:
                 flags.append([])
                 flags[len(flags) - 1].append(i)
                 flags[len(flags) - 1].append(idx)
                 flags[len(flags) - 1].append(idx + len(keyword))
 
-    elif algorithm == 3:                            # regex
-        for i in range(len(posts)):
-            idx = kmp(posts[i], keyword)
-            if idx != -1:
-                flags.append([])
-                flags[len(flags) - 1].append(i)
-                flags[len(flags) - 1].append(idx)
-
     flag_posts(posts, flags)
-    print(posts)
+    ct = 1
+    for post in posts:
+        print(ct, post)
+        ct += 1
 
 
 def flag_posts(posts, flags):
@@ -50,7 +59,9 @@ def flag_posts(posts, flags):
     :param flags:
     """
     for flag in flags:
-        posts[flag[0]] = posts[flag[0]][:flag[1]-1] + '<strong>' + posts[flag[1]-1:flag[2]-1] + '</strong>' + posts[:flag[2]-1]
+        print(posts[flag[0]])
+        posts[flag[0]] = posts[flag[0]][:flag[1]] + '<strong>' + posts[flag[0]][flag[1]:flag[2]] + '</strong>' + \
+                         posts[flag[0]][flag[2]:]
 
 
-main(1,'ridwankamil','a')
+main(3, 'ridwankamil', 'an')

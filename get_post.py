@@ -48,23 +48,24 @@ def main(algorithm, userid, keyword):
                 flags[len(flags) - 1].append(idx)
                 flags[len(flags) - 1].append(idx + len(keyword))
 
-    flag_posts(posts, flags)
-    ct = 1
-    for post in posts:
-        print(post)
-
-
-def flag_posts(posts, flags):
-    """
-    flag posts with bold in html version
-    :param posts:
-    :param flags:
-    """
     for flag in flags:
         print(posts[flag[0]])
         posts[flag[0]] = posts[flag[0]][:flag[1]] + '<strong>' + posts[flag[0]][flag[1]:flag[2]] + '</strong>' + \
                          posts[flag[0]][flag[2]:]
 
+    ct = 1
+    for post in posts:
+        print(post)
+
+
+# def flag_posts(posts, flags):
+#     """
+#     flag posts with bold in html version
+#     :param posts:
+#     :param flags:
+#     """
+    
+
 if __name__ == '__main__':
-    # main(sys.argv[1], sys.argv[2], sys.argv[3])
-    print("Hello")
+    main(sys.argv[1], sys.argv[2], sys.argv[3])
+    # print("Hello")

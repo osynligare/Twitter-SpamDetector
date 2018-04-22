@@ -38,7 +38,6 @@ def boyer_moore(big_string, pattern):
                 j -= 1
 
             if j < 0:
-                print("Pattern occur at character {}.".format(shift))
                 return shift
             else:
                 shift += max(1, j - bad_char[ord(big_string[shift + j])])

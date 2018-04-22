@@ -1,8 +1,11 @@
+#!/usr/bin/python
+
 import sys
 from tweety import find_post
 from algorithms.kmp import kmp
 from algorithms.boyer_moore import boyer_moore
 from algorithms.regex import regex
+import requests
 
 
 def main(algorithm, userid, keyword):
@@ -62,3 +65,6 @@ def flag_posts(posts, flags):
         posts[flag[0]] = posts[flag[0]][:flag[1]] + '<strong>' + posts[flag[0]][flag[1]:flag[2]] + '</strong>' + \
                          posts[flag[0]][flag[2]:]
 
+if __name__ == '__main__':
+    # main(sys.argv[1], sys.argv[2], sys.argv[3])
+    print("Hello")

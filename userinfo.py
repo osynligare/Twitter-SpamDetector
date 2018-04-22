@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import sys
 from bs4 import BeautifulSoup as bs
 import requests
 
@@ -24,3 +25,6 @@ def find_user(username):
 
     print(userid)
     print(profile_picture)
+
+if __name__ == '__main__':
+    find_user(sys.argv[1])

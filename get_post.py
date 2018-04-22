@@ -1,18 +1,18 @@
-from tweety import find_post, find_user
+import sys
+from tweety import find_post
 from algorithms.kmp import kmp
 from algorithms.boyer_moore import boyer_moore
 from algorithms.regex import regex
 
 
-def main(algorithm, username, keyword):
+def main(algorithm, userid, keyword):
     """
     main program, print posts
     :param algorithm: choice of algorithm, 1:kmp, 2:boyer moore, 3:regex
     :param username: username of twitter to parse
     :param keyword: keyword to search in post
     """
-    imageUrl = "<img src=" + find_user(username)[1] + "></img>"
-    posts = find_post(username)
+    posts = find_post(userid)
     flags = []
 
     if algorithm == 1:                              # kmp
@@ -48,8 +48,7 @@ def main(algorithm, username, keyword):
     flag_posts(posts, flags)
     ct = 1
     for post in posts:
-        print(ct, post)
-        ct += 1
+        print(post)
 
 
 def flag_posts(posts, flags):
@@ -63,5 +62,3 @@ def flag_posts(posts, flags):
         posts[flag[0]] = posts[flag[0]][:flag[1]] + '<strong>' + posts[flag[0]][flag[1]:flag[2]] + '</strong>' + \
                          posts[flag[0]][flag[2]:]
 
-
-main(3, 'ridwankamil', 'an')

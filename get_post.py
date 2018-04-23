@@ -55,7 +55,9 @@ def main(algorithm, userid, keyword):
 
     ct = 1
     for post in posts:
+        post = post.encode("utf8").replace(b'\\xe2\\x80\\xa6', b'...')
         print(post)
+        # print(unicodetoascii(post))
 
 
 # def flag_posts(posts, flags):

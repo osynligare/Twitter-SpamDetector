@@ -4,6 +4,7 @@
 <head>
     <title>Spam Detector</title>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
@@ -17,6 +18,42 @@ function reformat_input($data) {
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
     return $data;
+}
+
+function clean_post($post) {
+    $post = rtrim($post, '\'');
+    $post = rtrim($post, '"');
+    $post = str_replace("b'", "", $post);
+    $post = str_replace("b\"", "", $post);
+    $post = str_replace('\\xe2\\x80\\x99', '\'', $post);
+    $post = str_replace('\\xc3\\xa9', 'e', $post);
+    $post = str_replace('\\xe2\\x80\\x90', '-', $post);
+    $post = str_replace('\\xe2\\x80\\x91', '-', $post);
+    $post = str_replace('\\xe2\\x80\\x92', '-', $post);
+    $post = str_replace('\\xe2\\x80\\x93', '-', $post);
+    $post = str_replace('\\xe2\\x80\\x94', '-', $post);
+    $post = str_replace('\\xe2\\x80\\x94', '-', $post);
+    $post = str_replace('\\xe2\\x80\\x98', "'", $post);
+    $post = str_replace('\\xe2\\x80\\x9b', "'", $post);
+    $post = str_replace('\\xe2\\x80\\x9c', '"', $post);
+    $post = str_replace('\\xe2\\x80\\x9c', '"', $post);
+    $post = str_replace('\\xe2\\x80\\x9d', '"', $post);
+    $post = str_replace('\\xe2\\x80\\x9e', '"', $post);
+    $post = str_replace('\\xe2\\x80\\x9f', '"', $post);
+    $post = str_replace('\\xe2\\x80\\xa6', '...', $post);
+    $post = str_replace('\\xe2\\x80\\xb2', "'", $post);
+    $post = str_replace('\\xe2\\x80\\xb3', "'", $post);
+    $post = str_replace('\\xe2\\x80\\xb4', "'", $post);
+    $post = str_replace('\\xe2\\x80\\xb5', "'", $post);
+    $post = str_replace('\\xe2\\x80\\xb6', "'", $post);
+    $post = str_replace('\\xe2\\x80\\xb7', "'", $post);
+    $post = str_replace('\\xe2\\x81\\xba', "+", $post);
+    $post = str_replace('\\xe2\\x81\\xbb', "-", $post);
+    $post = str_replace('\\xe2\\x81\\xbc', "=", $post);
+    $post = str_replace('\\xe2\\x81\\xbd', "(", $post);
+    $post = str_replace('\\xe2\\x81\\xbe', ")", $post);
+
+    return $post;
 }
 
 // define variables and set to empty values
@@ -108,13 +145,15 @@ if(isset($_POST['submit']) && $is_form_valid) {
 <img src="<?php echo $userimg?>" alt="profile-picture">
 
 <?php
-        /* INI KENAPA GABISA */
         $get_post_query = "python get_post.py ".$algorithm." ".$userid." ".$keyword;
-        echo $get_post_query; // for debugging
+        // echo $get_post_query; // for debugging
         exec($get_post_query, $get_post_output, $ret);
-        echo $ret; // for debugging
+        // echo $ret; // for debugging
         foreach ($get_post_output as $tweet) {
-            echo $tweet;
+            $tweet = clean_post($tweet);
+            echo "<blockquote class=\"twitter-tweet\">";
+            echo "<p>".$tweet."</p>";
+            echo "</blockquote>";
         }
     }
 }

@@ -1,3 +1,38 @@
+body {
+  padding-bottom: 6rem;
+}
+
+form {
+  margin: 16px 0px;
+}
+
+.circle {
+  display: block;
+  margin: 1em auto;
+  -webkit-border-radius: 99em;
+  -moz-border-radius: 99em;
+  border-radius: 99em;
+  border: 5px solid #eee;
+  box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);  
+}
+
+.result-title {
+  text-align: center;
+  margin: auto;
+  border-color: #eee #ddd #bbb;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  width: fit-content;
+  padding: 16px;
+}
+
+.post-result {
+  width: 90vw;
+  margin: auto;
+}
+
 blockquote.twitter-tweet {
   display: inline-block;
   font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
@@ -11,7 +46,11 @@ blockquote.twitter-tweet {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
   margin: 10px 5px;
   padding: 16px 16px 0px 16px;
-  max-width: 468px;
+  max-width: 30%;
+}
+
+blockquote.spam-post {
+  background-color: rgb(255, 100, 100);
 }
 
 blockquote.twitter-tweet p {
@@ -32,27 +71,12 @@ blockquote.twitter-tweet a:focus {
   text-decoration: underline;
 }
 
-/* blockquote.twitter-tweet {
-  display: inline-block;
-  padding: 16px;
-  margin: 10px 0;
-  max-width: 468px;
-  border: #ddd 1px solid;
-  border-top-color: #eee;
-  border-bottom-color: #bbb;
-  border-radius: 5px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-  font: bold 14px/18px Helvetica, Arial, sans-serif;
-  color: #000;
+.footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #efefef;
+  text-align: center;
 }
-
-blockquote.twitter-tweet p {
-  font: normal 18px/24px Georgia, "Times New Roman", Palatino, serif;
-  margin: 0 5px 10px 0;
-}
-
-blockquote.twitter-tweet a[href^="https://twitter.com"] {
-  font-weight: normal;
-  color: #666;
-  font-size: 12px;
-} */

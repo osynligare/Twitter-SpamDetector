@@ -5,12 +5,11 @@ from tweety import find_post
 from algorithms.kmp import kmp
 from algorithms.boyer_moore import boyer_moore
 from algorithms.regex import regex
-import requests
 
 
 def main(algorithm, userid, keyword):
     """
-    main program, print posts
+    get post and flag spam
     :param algorithm: choice of algorithm, 1:kmp, 2:boyer moore, 3:regex
     :param username: username of twitter to parse
     :param keyword: keyword to search in post
@@ -18,7 +17,7 @@ def main(algorithm, userid, keyword):
     posts = find_post(userid)
     flags = []
 
-    if algorithm == 1:                              # kmp
+    if algorithm == '1':                              # kmp
         for i in range(len(posts)):
             idx = kmp(posts[i], keyword)
             if idx != -1:
@@ -27,7 +26,7 @@ def main(algorithm, userid, keyword):
                 flags[len(flags) - 1].append(idx)
                 flags[len(flags) - 1].append(idx + len(keyword))
 
-    elif algorithm == 2:                            # boyer_moore
+    elif algorithm == '2':                            # boyer_moore
         for i in range(len(posts)):
             try:
                 idx = int(boyer_moore(posts[i], keyword))
@@ -39,7 +38,7 @@ def main(algorithm, userid, keyword):
             except:
                 i = i
 
-    elif algorithm == 3:                            # regex
+    else:                            # regex
         for i in range(len(posts)):
             idx = regex(posts[i], keyword)
             if idx != -1:
@@ -48,26 +47,20 @@ def main(algorithm, userid, keyword):
                 flags[len(flags) - 1].append(idx)
                 flags[len(flags) - 1].append(idx + len(keyword))
 
+    # flagging spam
     for flag in flags:
-        print(posts[flag[0]])
         posts[flag[0]] = posts[flag[0]][:flag[1]] + '<strong>' + posts[flag[0]][flag[1]:flag[2]] + '</strong>' + \
                          posts[flag[0]][flag[2]:]
 
-    ct = 1
     for post in posts:
-        post = post.encode("utf8").replace(b'\\xe2\\x80\\xa6', b'...')
-        print(post)
-        # print(unicodetoascii(post))
+        if 'strong' in post:
+            p = '<strong>[spam]</strong> ' + post
+            p = p.encode("utf8")
+            print(p)
+        else:
+            post = post.encode("utf8")
+            print(post)
 
-
-# def flag_posts(posts, flags):
-#     """
-#     flag posts with bold in html version
-#     :param posts:
-#     :param flags:
-#     """
-    
 
 if __name__ == '__main__':
     main(sys.argv[1], sys.argv[2], sys.argv[3])
-    # print("Hello")

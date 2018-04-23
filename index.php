@@ -52,6 +52,7 @@ function clean_post($post) {
     $post = str_replace('\\xe2\\x81\\xbc', "=", $post);
     $post = str_replace('\\xe2\\x81\\xbd', "(", $post);
     $post = str_replace('\\xe2\\x81\\xbe', ")", $post);
+    $post = str_replace('\\xc2\\xa5', "&#xA5;", $post);
 
     return $post;
 }
@@ -79,13 +80,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!empty($_POST["algorithm"])) {
         if ($_POST["algorithm"] == "kmp") {
-            $algorithm = 1;
+            $algorithm = '1';
         }
         else if ($_POST["algorithm"] == "boyer-moore") {
-            $algorithm = 2;
+            $algorithm = '2';
         }
         else if ($_POST["algorithm"] == "regex") {
-            $algorithm = 3;
+            $algorithm = '3';
         }
     }
     else {
@@ -99,19 +100,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </nav>
 
 <div class="container">
+<h1>TweetSearch</h1>
+<h2><small>Look for spams in your Twitter timeline</small></h2>
 <form class="form" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
     <div class="form-group">
-        <label class="control-label" for="username">Username</label>
+        <label class="control-label" for="username"><strong>Username</strong></label>
         <input type="text" name="username" class="form-control" value="<?php echo $username;?>" placeholder="@twitteruser">
         <span class="error"><?php echo $usernameErr;?></span>
     </div>
     <div class="form-group">
-        <label class="control-label" for="keyword">Keyword</label>
+        <label class="control-label" for="keyword"><strong>Keyword</strong></label>
         <input type="text" name="keyword" class="form-control" value="<?php echo $keyword;?>" placeholder="words in tweets">
         <span class="error"><?php echo $keywordErr;?></span>
     </div>
     <div class="form-group">
-        <p class="control-label">Algorithm</p>
+        <p class="control-label"><strong>Algorithm</strong></p>
         <label class="radio-inline"><input type="radio" name="algorithm" value="kmp" <?php if ($algorithm == 1) echo "checked"?>> KMP</label>
         <label class="radio-inline"><input type="radio" name="algorithm" value="boyer-moore" <?php if ($algorithm == 2) echo "checked"?>> Boyer-Moore</label>
         <label class="radio-inline"><input type="radio" name="algorithm" value="regex" <?php if ($algorithm == 3) echo "checked"?>> Regex</label>
@@ -141,23 +144,41 @@ if(isset($_POST['submit']) && $is_form_valid) {
     if ($is_user_valid) {
 ?>
 
-<h3>Tweets from <i><?php echo "@".$username?></i></h2>
-<img src="<?php echo $userimg?>" alt="profile-picture">
-
-<?php
-        $get_post_query = "python get_post.py ".$algorithm." ".$userid." ".$keyword;
-        // echo $get_post_query; // for debugging
-        exec($get_post_query, $get_post_output, $ret);
-        // echo $ret; // for debugging
-        foreach ($get_post_output as $tweet) {
-            $tweet = clean_post($tweet);
-            echo "<blockquote class=\"twitter-tweet\">";
-            echo "<p>".$tweet."</p>";
-            echo "</blockquote>";
+<div class="result-title">
+    <h3><small>Tweets from <strong><i><?php echo "@".$username?></i></strong></small></h2>
+    <img class="circle" src="<?php echo $userimg?>" alt="profile-picture">
+</div>
+<div class="post-result">
+    <?php
+            $get_post_query = "python get_post.py ".$algorithm." ".$userid." ".$keyword;
+            // echo $get_post_query; // for debugging
+            exec($get_post_query, $get_post_output, $ret);
+            // echo $ret; // for debugging
+            foreach ($get_post_output as $tweet) {
+                $tweet = clean_post($tweet);
+                if (strpos($tweet, '<strong>') !== false && strpos($tweet, '[spam]') !== false) {
+                    echo "<blockquote class=\"twitter-tweet spam-post\">";
+                }
+                else {
+                    echo "<blockquote class=\"twitter-tweet\">";
+                }
+                echo "<p>".$tweet."</p>";
+                echo "</blockquote>";
+            }
+        }
+        else {
+    ?>
+            <div class="alert alert-danger">
+            <strong>Error!</strong> Invalid username.
+            </div>
+    <?php
         }
     }
-}
-?>
+    ?>
+</div>
+
+<div class="footer">&copy; 2018 by <strong>DNA</strong>.</div>
+
 </div>
 </body>
 
